@@ -1,0 +1,63 @@
+.matrix {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.module {
+  position: relative;
+  margin: 0;
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  min-width: 0;
+}
+
+.legend {
+  padding: 0 var(--space-2);
+  font-weight: var(--weight-black);
+  font-size: var(--text-md);
+}
+
+.toggleAll {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-3);
+  min-height: 36px;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
+  color: var(--color-link);
+}
+
+.saveBar {
+  position: sticky;
+  bottom: calc(var(--bottom-nav-height) + var(--safe-bottom) + var(--space-2));
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-lg);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--color-border);
+}
+
+@media (min-width: 768px) {
+  .matrix {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1024px) {
+  .saveBar {
+    bottom: var(--space-4);
+  }
+}
+
+@media (min-width: 1280px) {
+  .matrix {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

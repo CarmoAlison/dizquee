@@ -1,0 +1,53 @@
+/* Páginas de texto legal (Termos e Privacidade) */
+.page {
+  max-width: 760px;
+  padding-top: var(--space-6);
+}
+
+.article {
+  padding: var(--space-6) var(--space-5);
+  border-radius: var(--radius-xl);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  line-height: 1.7;
+}
+
+.article h1 {
+  font-size: var(--text-2xl);
+  margin-bottom: var(--space-2);
+}
+
+.article h2 {
+  font-size: var(--text-lg);
+  margin: var(--space-6) 0 var(--space-2);
+}
+
+.article p,
+.article li {
+  color: var(--color-text);
+  margin-bottom: var(--space-2);
+}
+
+.article ul {
+  padding-left: var(--space-5);
+}
+
+.updated {
+  color: var(--color-text-muted);
+  font-size: var(--text-sm);
+}
+
+.note {
+  margin-top: var(--space-6);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-warning-bg);
+  color: var(--color-warning-text);
+  font-size: var(--text-sm);
+}
+
+@media (min-width: 768px) {
+  .article {
+    padding: var(--space-8) var(--space-10);
+  }
+}

@@ -1,0 +1,49 @@
+.button {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-height: var(--touch-min);
+  min-width: var(--touch-min);
+  padding: 0 var(--space-2);
+  border-radius: var(--radius-full);
+  color: var(--color-text);
+  font-weight: var(--weight-bold);
+  font-size: var(--text-sm);
+  transition: background var(--duration-fast);
+}
+
+.button:hover {
+  background: var(--color-surface-2);
+}
+
+.liked {
+  color: var(--color-like);
+}
+
+.liked .icon {
+  animation: likePop var(--duration-slow) var(--ease-out);
+}
+
+.overlay {
+  color: #fff;
+}
+
+.overlay:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.overlay.liked {
+  color: var(--color-accent-1);
+}
+
+@keyframes likePop {
+  0% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.3);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

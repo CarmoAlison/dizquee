@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>Bloco Diz Que É · Macau/RN</title>
+    <meta
+      name="description"
+      content="Portal oficial do Bloco Diz Que É, de Macau/RN: novidades, fotos, vídeos e stories do bloco de carnaval. Acompanhe, curta e comente!"
+    />
+    <meta name="robots" content="index, follow, max-image-preview:large" />
+    <meta name="application-name" content="Bloco Diz Que É" />
+    <meta name="theme-color" content="#660385" />
+    <meta name="format-detection" content="telephone=no" />
+    <meta name="geo.region" content="BR-RN" />
+    <meta name="geo.placename" content="Macau" />
+    <link rel="icon" type="image/svg+xml" href="/logo-dizquee-principal.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="/logo-dizquee-principal.png" />
+    <link rel="apple-touch-icon" href="/logo-dizquee-principal.png" />
+    <link rel="sitemap" type="application/xml" title="Sitemap" href="/sitemap.xml" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-title" content="Diz Que É" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <!-- Compartilhamento (o JavaScript ajusta por página; posts usam api/share) -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Bloco Diz Que É" />
+    <meta property="og:locale" content="pt_BR" />
+    <meta property="og:title" content="Bloco Diz Que É · Macau/RN" />
+    <meta property="og:description" content="Novidades, fotos, vídeos e stories do bloco de carnaval de Macau/RN." />
+    <meta property="og:image" content="/icons/og-default.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <!--
+      Google Search Console (verificação por meta tag): cole aqui a tag que o
+      Search Console fornecer, por exemplo:
+      <meta name="google-site-verification" content="SEU-CODIGO" />
+    -->
+    <!-- Dados estruturados: quem é o bloco e o site (aparecem no Google).
+         Montados com o domínio atual para os endereços ficarem absolutos. -->
+    <script>
+      (function () {
+        var o = location.origin
+        var data = {
+          "@context": "https://schema.org",
+          "@graph": [
+            {
+              "@type": "Organization",
+              "@id": o + "/#organizacao",
+              name: "Bloco Diz Que É",
+              alternateName: ["Diz Que É", "Equipe Diz Que É", "Portal Diz Que É"],
+              description: "Bloco de carnaval de Macau/RN.",
+              url: o + "/",
+              logo: o + "/icons/icon-512.png",
+              address: { "@type": "PostalAddress", addressLocality: "Macau", addressRegion: "RN", addressCountry: "BR" }
+              // Redes sociais (ajuda o Google a ligar o site ao perfil):
+              // , sameAs: ["https://www.instagram.com/SEU_PERFIL"]
+            },
+            {
+              "@type": "WebSite",
+              "@id": o + "/#site",
+              name: "Bloco Diz Que É",
+              alternateName: "Portal Diz Que É",
+              url: o + "/",
+              inLanguage: "pt-BR",
+              publisher: { "@id": o + "/#organizacao" }
+            }
+          ]
+        }
+        var s = document.createElement("script")
+        s.type = "application/ld+json"
+        s.textContent = JSON.stringify(data)
+        document.head.appendChild(s)
+      })()
+    </script>
+    <script>
+      // Aplica o tema antes da renderização (evita "piscar" claro/escuro)
+      (function () {
+        try {
+          var saved = localStorage.getItem('theme')
+          var dark = saved ? saved === 'dark' : window.matchMedia('(prefers-color-scheme: dark)').matches
+          document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light')
+        } catch (e) {
+          document.documentElement.setAttribute('data-theme', 'light')
+        }
+      })()
+    </script>
+  </head>
+  <body>
+    <noscript>Ative o JavaScript para usar o site do bloco.</noscript>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>

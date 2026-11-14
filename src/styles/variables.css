@@ -1,0 +1,104 @@
+/* =====================================================================
+   Variáveis de design (tokens fixos). As cores semânticas que mudam com
+   o tema ficam em themes.css.
+   Breakpoints (mobile-first, usar em min-width):
+     480px (celular grande) | 768px (tablet) | 1024px (desktop) | 1280px (desktop largo)
+   ===================================================================== */
+:root {
+  /* Cores da marca (padrão). Podem ser trocadas em Painel › Identidade visual:
+     o BrandContext sobrescreve estas 4 variáveis no <html> e todo o resto deriva delas. */
+  --color-primary-1: #660385; /* predominante 01 */
+  --color-primary-2: #AB00B3; /* predominante 02 */
+  --color-accent-1: #FF0096;  /* destaque 01 (curtir, ações, notificações) */
+  --color-accent-2: #FDCB26;  /* destaque 02 (anel de story, selos, destaques) */
+
+  /* Variações para garantir contraste AA em textos */
+  --color-accent-1-strong: color-mix(in srgb, var(--color-accent-1) 82%, black); /* texto branco legível */
+  --color-on-accent-2: #2A0038;
+
+  /* Degradês */
+  --gradient-primary: linear-gradient(135deg, var(--color-primary-1), var(--color-primary-2));
+  --gradient-story: linear-gradient(45deg, var(--color-accent-2), var(--color-accent-1));
+  --gradient-accent: linear-gradient(135deg, var(--color-accent-1-strong), var(--color-primary-2));
+  --gradient-hero: radial-gradient(120% 140% at 100% 0%, var(--color-primary-2) 0%, transparent 55%),
+    linear-gradient(135deg, var(--color-primary-1), color-mix(in srgb, var(--color-primary-1) 60%, var(--color-primary-2)));
+
+  /* Confete de carnaval (decoração de banners e do menu do admin) */
+  --pattern-confetti: radial-gradient(circle at 12% 30%, var(--color-accent-2) 0 3px, transparent 4px),
+    radial-gradient(circle at 78% 22%, var(--color-accent-1) 0 4px, transparent 5px),
+    radial-gradient(circle at 40% 78%, rgba(255, 255, 255, 0.55) 0 2px, transparent 3px),
+    radial-gradient(circle at 92% 70%, var(--color-accent-2) 0 2.5px, transparent 3.5px),
+    radial-gradient(circle at 60% 45%, rgba(255, 255, 255, 0.35) 0 1.5px, transparent 2.5px),
+    radial-gradient(circle at 25% 85%, var(--color-accent-1) 0 2px, transparent 3px);
+
+  /* Tipografia: Poppins (auto-hospedada via @fontsource, funciona offline) */
+  --font-body: 'Poppins', system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif;
+  --font-display: var(--font-body);
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1rem;
+  --text-lg: 1.125rem;
+  --text-xl: 1.375rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: 2.25rem;
+  --leading-tight: 1.2;
+  --leading-normal: 1.55;
+  --weight-regular: 400;
+  --weight-medium: 500;
+  --weight-semibold: 600;
+  --weight-bold: 600;
+  --weight-black: 700;
+
+  /* Espaçamentos (escala de 4 px) */
+  --space-1: 0.25rem;
+  --space-2: 0.5rem;
+  --space-3: 0.75rem;
+  --space-4: 1rem;
+  --space-5: 1.25rem;
+  --space-6: 1.5rem;
+  --space-8: 2rem;
+  --space-10: 2.5rem;
+  --space-12: 3rem;
+  --space-16: 4rem;
+
+  /* Raios */
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 18px;
+  --radius-xl: 26px;
+  --radius-full: 999px;
+
+  /* Layout */
+  --container-max: 1180px;
+  --feed-max: 620px;
+  --header-height: 64px;
+  --bottom-nav-height: 64px;
+  --touch-min: 44px;
+  --safe-top: env(safe-area-inset-top, 0px);
+  --safe-bottom: env(safe-area-inset-bottom, 0px);
+  --safe-left: env(safe-area-inset-left, 0px);
+  --safe-right: env(safe-area-inset-right, 0px);
+
+  /* Camadas */
+  --z-header: 50;
+  --z-bottom-nav: 50;
+  --z-dropdown: 60;
+  --z-drawer: 70;
+  --z-modal: 100;
+  --z-viewer: 90; /* abaixo dos modais (login, estatísticas) */
+  --z-toast: 200;
+
+  /* Animações */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --duration-fast: 120ms;
+  --duration-normal: 220ms;
+  --duration-slow: 360ms;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --duration-fast: 0ms;
+    --duration-normal: 0ms;
+    --duration-slow: 0ms;
+  }
+}

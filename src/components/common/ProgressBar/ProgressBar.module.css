@@ -1,0 +1,19 @@
+.track {
+  width: 100%;
+  height: 6px;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-3);
+  overflow: hidden;
+}
+
+.bar {
+  display: block;
+  height: 100%;
+  border-radius: inherit;
+  background: var(--gradient-story);
+  transition: width var(--duration-normal) linear;
+}
+
+.error .bar {
+  background: var(--color-danger);
+}

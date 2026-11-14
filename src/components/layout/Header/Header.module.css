@@ -1,0 +1,120 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  background: var(--gradient-primary);
+  color: #fff;
+  padding-top: var(--safe-top);
+  box-shadow: 0 2px 16px color-mix(in srgb, var(--color-primary-1) 30%, transparent);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  height: 56px;
+  
+}
+
+.brand {
+  display: inline-flex;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+  
+}
+
+.brand:focus-visible,
+.link:focus-visible,
+.iconButton:focus-visible,
+.profile:focus-visible {
+  outline-color: var(--color-accent-2);
+}
+
+.nav {
+  display: none;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--touch-min);
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-full);
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: var(--weight-bold);
+  font-size: 14px;
+  text-decoration: none;
+  transition: background var(--duration-fast);
+}
+
+.link:hover {
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+}
+
+.active {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
+  box-shadow: inset 1px 0px 5px var(--color-accent-2);
+}
+
+.actions {
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.iconButton {
+  display: inline-grid;
+  place-items: center;
+  width: var(--touch-min);
+  height: var(--touch-min);
+  border-radius: var(--radius-full);
+  color: #fff;
+}
+
+.iconButton:hover {
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.loginButton {
+  color: #fff;
+}
+.loginButton:hover {
+  background: rgba(255, 255, 255, 0.14) !important;
+}
+
+.registerButton {
+  background: var(--color-accent-2);
+  color: var(--color-on-accent-2);
+  box-shadow: none;
+}
+
+.profile {
+  display: inline-flex;
+  padding: 3px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.25);
+}
+
+.desktopOnly {
+  display: none;
+}
+
+@media (min-width: 1024px) {
+  .inner {
+    height: var(--header-height);
+    gap: var(--space-6);
+  }
+  .nav {
+    display: flex;
+    gap: var(--space-1);
+  }
+  .desktopOnly {
+    display: inline-flex;
+  }
+  .mobileOnly {
+    display: none;
+  }
+}

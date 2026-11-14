@@ -1,0 +1,22 @@
+.color {
+  width: 14px;
+  height: 40px;
+  border-radius: 7px;
+  flex-shrink: 0;
+}
+
+.colorRow {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-3);
+}
+
+.colorInput {
+  width: 140px;
+}
+
+.colorInput input {
+  padding: 4px;
+  height: var(--touch-min);
+  cursor: pointer;
+}

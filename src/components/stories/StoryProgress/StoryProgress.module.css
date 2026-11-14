@@ -1,0 +1,39 @@
+.progress {
+  display: flex;
+  gap: 4px;
+  width: 100%;
+}
+
+.segment {
+  position: relative;
+  flex: 1;
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(255, 255, 255, 0.35);
+  overflow: hidden;
+}
+
+.fill {
+  position: absolute;
+  inset: 0;
+  background: #fff;
+  border-radius: inherit;
+  transform-origin: left center;
+}
+
+.done {
+  transform: scaleX(1);
+}
+
+.active {
+  transform: scaleX(0);
+  animation-name: grow;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes grow {
+  to {
+    transform: scaleX(1);
+  }
+}

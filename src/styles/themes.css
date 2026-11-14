@@ -1,0 +1,71 @@
+/* =====================================================================
+   Temas claro e escuro (data-theme no <html>). O tema inicial respeita
+   prefers-color-scheme (script em index.html) e pode ser trocado.
+   As cores de destaque da interface derivam das 4 cores da marca
+   (variables.css / Painel › Identidade visual), então trocar a marca
+   atualiza tudo. Neutros levemente tingidos com a cor principal.
+   ===================================================================== */
+:root,
+[data-theme='light'] {
+  color-scheme: light;
+  --color-bg: color-mix(in srgb, var(--color-primary-1) 4%, #faf8fc);
+  --color-surface: #ffffff;
+  --color-surface-2: color-mix(in srgb, var(--color-primary-1) 6%, #ffffff);
+  --color-surface-3: color-mix(in srgb, var(--color-primary-1) 11%, #ffffff);
+  --color-border: color-mix(in srgb, var(--color-primary-1) 11%, #ffffff);
+  --color-border-strong: color-mix(in srgb, var(--color-primary-1) 24%, #ffffff);
+  --color-text: #1E0A26;
+  --color-text-muted: #5E4B68;
+  --color-text-subtle: #6F5A79;
+  --color-link: var(--color-primary-1);
+  --color-primary: var(--color-primary-1);
+  --color-primary-hover: color-mix(in srgb, var(--color-primary-1) 85%, black);
+  --color-on-primary: #FFFFFF;
+  --color-focus: var(--color-primary-2);
+  --color-like: var(--color-accent-1-strong);
+  --color-danger: #B3261E;
+  --color-danger-bg: #FDECEA;
+  --color-success: #1B7F3B;
+  --color-success-bg: #E6F4EA;
+  --color-warning-bg: #FFF4D1;
+  --color-warning-text: #6B4A00;
+  --color-overlay: rgba(20, 0, 28, 0.55);
+  --color-skeleton: color-mix(in srgb, var(--color-primary-1) 8%, #ffffff);
+  --color-skeleton-shine: color-mix(in srgb, var(--color-primary-1) 3%, #ffffff);
+  --color-story-seen: color-mix(in srgb, var(--color-primary-1) 22%, #ffffff);
+  --shadow-sm: 0 1px 2px rgba(40, 0, 60, 0.05), 0 2px 8px rgba(40, 0, 60, 0.04);
+  --shadow-md: 0 6px 24px rgba(40, 0, 60, 0.08), 0 2px 6px rgba(40, 0, 60, 0.04);
+  --shadow-lg: 0 18px 50px rgba(40, 0, 60, 0.16);
+}
+
+[data-theme='dark'] {
+  color-scheme: dark;
+  --color-bg: color-mix(in srgb, var(--color-primary-1) 14%, #0b0010);
+  --color-surface: color-mix(in srgb, var(--color-primary-1) 20%, #140019);
+  --color-surface-2: color-mix(in srgb, var(--color-primary-1) 28%, #1a0021);
+  --color-surface-3: color-mix(in srgb, var(--color-primary-1) 38%, #1d0025);
+  --color-border: color-mix(in srgb, var(--color-primary-1) 35%, #241030);
+  --color-border-strong: color-mix(in srgb, var(--color-primary-1) 50%, #3a1f48);
+  --color-text: #F6EEFA;
+  --color-text-muted: #C9B6D4;
+  --color-text-subtle: #A893B4;
+  --color-link: color-mix(in srgb, var(--color-primary-2) 40%, white);
+  --color-primary: color-mix(in srgb, var(--color-primary-2) 82%, white);
+  --color-primary-hover: color-mix(in srgb, var(--color-primary-2) 70%, white);
+  --color-on-primary: #FFFFFF;
+  --color-focus: color-mix(in srgb, var(--color-primary-2) 50%, white);
+  --color-like: color-mix(in srgb, var(--color-accent-1) 75%, white);
+  --color-danger: #FF8A80;
+  --color-danger-bg: #3B1416;
+  --color-success: #7EDC9A;
+  --color-success-bg: #12301D;
+  --color-warning-bg: #3A2E05;
+  --color-warning-text: #FFE08A;
+  --color-overlay: rgba(0, 0, 0, 0.7);
+  --color-skeleton: color-mix(in srgb, var(--color-primary-1) 30%, #1d0a27);
+  --color-skeleton-shine: color-mix(in srgb, var(--color-primary-1) 40%, #2c1638);
+  --color-story-seen: color-mix(in srgb, var(--color-primary-1) 45%, #3a2148);
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 6px 24px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 18px 50px rgba(0, 0, 0, 0.6);
+}
