@@ -30,7 +30,12 @@ export function ProductCard({ product }) {
       </div>
       <div className={styles.body}>
         <h3 className={styles.name}>{product.name}</h3>
-        {price !== undefined && price !== null && <p className={styles.price}>{formatMoney(price)}</p>}
+        <div className={styles.footer}>
+          {price !== undefined && price !== null && <p className={styles.price}>{formatMoney(price)}</p>}
+          <span className={styles.cta} aria-hidden="true">
+            <Icon name="bag" size={18} />
+          </span>
+        </div>
         {state === 'available' && product.lot?.remaining !== null && product.lot?.remaining <= 10 && (
           <p className={styles.hint}>Últimas {product.lot.remaining} no {product.lot.name.toLowerCase()}</p>
         )}
