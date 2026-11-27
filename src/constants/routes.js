@@ -12,6 +12,11 @@ export const ROUTES = {
   COMPLETE_PROFILE: '/completar-cadastro',
   TERMS: '/termos',
   PRIVACY: '/privacidade',
+  SHOP: '/loja',
+  PRODUCT: (slug = ':slug') => `/loja/${slug}`,
+  CART: '/carrinho',
+  MY_ORDERS: '/pedidos',
+  MY_ORDER: (number = ':number') => `/pedidos/${number}`,
 
   ADMIN: '/admin',
   ADMIN_POSTS: '/admin/posts',
@@ -28,6 +33,21 @@ export const ROUTES = {
   ADMIN_COMMENTS: '/admin/comentarios',
   ADMIN_AUDIT: '/admin/auditoria',
   ADMIN_BRAND: '/admin/identidade',
+  ADMIN_PRODUCTS: '/admin/produtos',
+  ADMIN_PRODUCT_NEW: '/admin/produtos/novo',
+  ADMIN_PRODUCT_EDIT: (id = ':id') => `/admin/produtos/${id}`,
+  ADMIN_ORDERS: '/admin/pedidos',
+  ADMIN_ORDER: (number = ':number') => `/admin/pedidos/${number}`,
+  ADMIN_SHOP_SETTINGS: '/admin/loja',
+  ADMIN_CHECKIN: '/admin/retirada',
+  ADMIN_QUICK_SALE: '/admin/venda-rapida',
+  ADMIN_STOCK: '/admin/estoque',
+  ADMIN_PURCHASES: '/admin/compras',
+  ADMIN_PURCHASE_NEW: '/admin/compras/nova',
+  ADMIN_FINANCE: '/admin/financeiro',
+  ADMIN_FINANCE_ENTRIES: '/admin/financeiro/lancamentos',
+  ADMIN_FINANCE_CATEGORIES: '/admin/financeiro/categorias',
+  ADMIN_FINANCE_REPORT: '/admin/relatorio-financeiro',
 }
 
 // Rotas que um usuário com cadastro incompleto ainda pode acessar

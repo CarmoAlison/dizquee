@@ -133,3 +133,169 @@ Verificado automaticamente por `npm run test:db` (✔) ou a conferir no projeto 
 - Rodar o **Lighthouse** após o deploy (não medido aqui). Já aplicado: páginas carregadas sob demanda, imagens lazy com dimensões, vídeos com `preload` mínimo, cache do service worker.
 - Testes no aparelho real (iOS/Android) do visualizador de stories e da instalação do PWA.
 - Fora do escopo (arquitetura pronta): agenda, loja/pagamentos, galeria, patrocinadores, carteirinha, denúncias e filtro de palavrões, push (Fase 5).
+
+---
+
+# Entrega — Fase 6 (loja e pedidos pelo WhatsApp)
+
+Status: build OK · lint sem erros (os mesmos 7 avisos antigos) · `npm run test:db` passa, agora com **~45 testes novos** de loja e pedidos.
+
+> Não testado aqui: as telas rodando contra o Supabase real (a migração 0011 ainda precisa ser aplicada no seu projeto) e o envio de fotos para o bucket `product-images`.
+
+## Preparação
+1. No SQL Editor do Supabase, rode `supabase/migrations/0011_shop_orders.sql`. Ela é idempotente e pode ser rodada de novo.
+2. O Super Admin já ganha as permissões novas. Para a equipe, crie perfis em Painel › Perfis de acesso, por exemplo:
+   - **Loja:** `products.manage`;
+   - **Atendimento:** `orders.view` + `orders.manage`;
+   - **Consulta:** só `orders.view`.
+3. Painel › **Config. da loja**: informe o WhatsApp do bloco, o texto de retirada e deixe a loja aberta.
+
+## Passo a passo de teste
+- [ ] Painel › Produtos › Novo: crie "Abadá" (produto) → fotos (a 1ª é a capa; reordenar e excluir) → variações P/M/G com estoque → lotes (1º lote R$ 80 até 2 un., 2º lote R$ 100) → "Mostrar na loja".
+- [ ] Crie "Copo" (variação "Único" com estoque) e um **Kit** com Abadá + Copo e lote próprio.
+- [ ] O aviso amarelo "Para vender, falta…" some quando o produto tem lote, estoque e itens no kit.
+- [ ] **/loja**: cards com preço do lote vigente, selo do lote, "Esgotado" e "Em breve". Barra inferior com "Loja"; ícone de carrinho no header.
+- [ ] Visitante clica em "Adicionar ao carrinho" → abre o modal de login sobre a página.
+- [ ] Produto: escolher tamanho (sem estoque aparece riscado), quantidade limitada ao estoque, nomes de quem vai usar (se marcado no produto).
+- [ ] Kit: escolher o tamanho do abadá dentro do kit.
+- [ ] Carrinho: alterar quantidade, nomes, remover; total estimado; aviso se algo esgotou ou mudou de preço.
+- [ ] Fazer pedido com 3 abadás quando o 1º lote tem 2 → o pedido mostra 2× R$ 80 + 1× R$ 100; o estoque baixa na hora.
+- [ ] Tela "Pedido feito!" → **Enviar pelo WhatsApp** abre a conversa com o bloco, com número, itens e total.
+- [ ] O sino da equipe (orders.view) avisa "fez o pedido #N" em tempo real.
+- [ ] Meus pedidos (perfil, header e /pedidos): lista e detalhe com andamento; **Cancelar** enquanto aguarda pagamento (o estoque volta).
+- [ ] Painel › Pedidos: cartões de resumo, busca por número/nome/telefone, filtros por status e período, paginação.
+- [ ] Pedido no painel: **Chamar no WhatsApp** (cliente), **Marcar como pago** (pede a forma de pagamento), Pronto para retirada, Retirado, voltar um passo, Cancelar/Reembolsar (definitivos, devolvem estoque se ainda não retirado).
+- [ ] O cliente recebe o aviso "atualizou seu pedido #N: Pago" e vê a linha do tempo, com a retirada quando pago/pronto.
+- [ ] Loja fechada (Config. da loja) → o cliente vê os produtos, mas não consegue fazer pedido.
+- [ ] Auditoria: áreas Produtos, Variações e estoque, Lotes, Pedidos e Configurações da loja.
+
+## Checklist de segurança (testado em `npm run test:db`)
+| Quem | Consegue | Não consegue |
+|---|---|---|
+| Visitante | ver o catálogo (só produtos ativos) | fazer pedido, ler pedidos |
+| Cliente | fazer pedido pela RPC, ver/cancelar **os próprios** pedidos enquanto aguardam pagamento | inserir/alterar pedido direto, mudar status, mandar preço (é ignorado), ler o token do QR, ver estoque/movimentações, ver pedido de outra pessoa |
+| Banido | — | fazer pedido |
+| Atendimento (orders.view/manage) | ver todos os pedidos, receber aviso, mudar status | editar produtos, reabrir pedido cancelado, pular etapas |
+| Loja (products.manage) | catálogo, fotos, estoque, lotes, kits, config. da loja | alterar o contador de vendidos do lote, excluir produto/variação/lote que já vendeu |
+
+## Decisões tomadas
+- **Divisão das fases:** como o pagamento é pelo WhatsApp, a gestão de pedidos no painel veio para a Fase 6 (sem ela não dá para fechar a venda). A Fase 7 fica com retirada por QR, compras de fornecedor, ajustes de estoque e venda rápida.
+- **WhatsApp nos dois sentidos:** o cliente manda o pedido para o número do bloco (mensagem pronta) e a equipe tem o botão "Chamar no WhatsApp" com o número que o cliente confirmou no carrinho.
+- **Lote que vira no meio do pedido:** o banco divide o item (parte em cada lote), em vez de recusar.
+- **Kit:** tem preço e lotes próprios; o estoque baixa dos produtos que o compõem.
+- **Estoque reservado no pedido** e devolvido ao cancelar/reembolsar antes da retirada. Reembolso depois de retirado não mexe no estoque.
+- **Status:** cancelado e reembolsado são finais; entre os demais dá para voltar um passo (corrigir engano), sempre com histórico.
+- **Produto/variação/lote que já vendeu não é excluído** (o certo é ocultar/desativar ou encerrar o lote), para preservar o histórico e o futuro financeiro.
+- **Ajuste de estoque feito no cadastro** já gera movimentação (`stock_movements`), base para a Fase 7.
+- **Conta excluída:** o pedido continua existindo (registro financeiro), sem vínculo com o usuário.
+- **Carrinho no aparelho** (localStorage), sincronizado entre abas.
+
+## Pendências
+- Aplicar a 0011 no Supabase e testar as telas de verdade.
+- Fase 7 (QR na retirada, estoque e venda rápida) e Fase 8 (financeiro e relatórios) aguardam sua validação.
+
+---
+
+# Entrega — Fase 7 (retirada com QR, estoque e venda rápida)
+
+Status: build OK · lint sem erros (os mesmos avisos antigos) · `npm run test:db` passa, com testes novos de estoque, compras, venda rápida e retirada.
+
+## Preparação
+1. Rode `supabase/migrations/0012_pickup_stock_sales.sql` no SQL Editor (depois da 0011).
+2. Perfis sugeridos:
+   - **Barraca:** `sales.create` + `orders.checkin`;
+   - **Retirada:** só `orders.checkin`;
+   - **Estoque:** `stock.manage`.
+
+## Passo a passo de teste
+- [ ] **Compras › Nova compra:** fornecedor (digite um novo ou escolha da lista), itens com variação, quantidade e custo unitário, "A pagar" com vencimento ou "Já paga" → o estoque sobe.
+- [ ] Segunda compra da mesma variação com outro custo → o custo médio em Estoque fica entre os dois.
+- [ ] **Estoque:**
+  - saldo, reservado (pedidos aguardando pagamento), vendido e custo médio;
+  - alerta de estoque baixo (sino) e o filtro "Só estoque baixo";
+  - **Ajustar** (saída ou entrada, com motivo obrigatório);
+  - **Movimentações** (geral e por variação).
+- [ ] **Compras:**
+  - marcar paga / a pagar;
+  - excluir (o estoque volta; se os itens já foram vendidos, o sistema não deixa).
+- [ ] **Venda rápida:**
+  - tocar nos produtos e escolher tamanho/itens do kit;
+  - forma de pagamento; "Entregue na hora" ligado;
+  - finalizar → o estoque baixa e o pedido aparece em Pedidos como **Retirado** (canal presencial);
+  - com "Entregue na hora" desligado → fica **Pago**.
+- [ ] Cliente com pedido **Pago/Pronto** → "Meus pedidos" mostra o **QR Code**. Aguardando pagamento → sem QR.
+- [ ] **Retirada (QR):**
+  - "Ler QR Code" (permitir a câmera) → mostra "Pode entregar" com os itens → **Confirmar retirada**;
+  - ler de novo → "JÁ FOI RETIRADO em … por …";
+  - pedido aguardando pagamento → "Não entregar".
+- [ ] Busca manual pelo número do pedido.
+- [ ] Ler o QR com a **câmera comum** do celular da equipe → abre direto a tela de retirada com o pedido (se não estiver logado, entra e volta para ela).
+
+## Checklist de segurança (testado)
+| Quem | Consegue | Não consegue |
+|---|---|---|
+| Cliente | ver o próprio QR (só pago/pronto) | ver o token de outra pessoa, confirmar retirada |
+| Barraca (sales.create + orders.checkin) | venda rápida, ler QR, confirmar retirada | ver custos, ajustar estoque, ler a tabela de pedidos |
+| Estoque (stock.manage) | compras, ajustes, custos, movimentações | — |
+| Todos | — | inserir compra direto (só pela função), estoque negativo, retirar duas vezes |
+
+## Decisões
+- O QR guarda um **link** com um token secreto (nunca o número): funciona no leitor da tela e na câmera comum.
+- O leitor usa o `BarcodeDetector` do navegador e cai para `jsqr` no iPhone.
+- **Custo médio ponderado**, guardado numa tabela separada que nunca aparece na leitura pública das variações.
+- Excluir uma compra devolve o estoque, mas não recalcula o custo médio. Para corrigir o custo, lance uma compra nova.
+- A venda rápida usa o **preço do lote vigente**, vende também produtos ocultos na loja online e ignora "loja fechada".
+- A venda rápida e o pedido do site usam a **mesma função interna** de itens (preço, lote, estoque).
+
+---
+
+# Entrega — Fase 8 (financeiro e relatórios)
+
+Status: build OK · lint sem erros · `npm run test:db` passa (135 verificações no total), incluindo o backfill rodado de novo com dados, sem duplicar lançamentos.
+
+## Preparação
+1. Rode `supabase/migrations/0013_finance.sql` (depois da 0012). Pedidos pagos e compras que já existem entram no financeiro na hora.
+2. Perfis sugeridos:
+   - **Tesouraria:** `finance.manage`;
+   - **Diretoria (só consulta):** `finance.view`.
+
+## Passo a passo de teste
+- [ ] **Financeiro › Visão geral:**
+  - escolher o período (este mês, mês passado, 30 dias, ano ou datas livres);
+  - cartões de entradas, saídas, saldo, a pagar e a receber;
+  - aviso de vencidos (clicável);
+  - gráfico de entradas × saídas (auto/dia/semana/mês, toque para ver valores);
+  - barras por categoria (pendente hachurado);
+  - **vendas por produto** com quantidade, receita, custo e **lucro**.
+- [ ] Marcar um pedido como **Pago** → aparece a receita "Pedido #N (loja online)".
+- [ ] **Reembolsar** → aparece a despesa "Reembolso do pedido #N".
+- [ ] **Cancelar** depois de pago → a receita some.
+- [ ] Venda rápida → receita "(venda presencial)".
+- [ ] Nova compra → despesa "Compra de …" (a pagar/paga); marcar paga no financeiro muda a compra e vice-versa.
+- [ ] **Lançamentos:**
+  - nova receita (ex.: Patrocínio) ou despesa (ex.: Banda), paga ou a pagar com vencimento;
+  - editar, excluir, marcar pago/recebido;
+  - filtros (tipo, situação, categoria, origem, período, só vencidos).
+- [ ] Lançamentos automáticos não têm editar/excluir: aparece "Automático: …" com link para o pedido ou a compra.
+- [ ] **Categorias financeiras:** criar, editar nome/cor, excluir (as de sistema e as que têm lançamentos ficam protegidas).
+- [ ] **Exportar** (no período escolhido):
+  - **CSV** abre direto no Excel com acentos e vírgula decimal;
+  - **Excel** traz as abas Resumo, Lançamentos e Vendas por produto, com formato R$;
+  - **PDF** abre o relatório com logo, cores e tabelas → "Salvar PDF / Imprimir" → "Salvar como PDF".
+
+## Checklist de segurança (testado)
+| Quem | Consegue | Não consegue |
+|---|---|---|
+| finance.view | ver tudo e exportar | lançar, editar, marcar pago |
+| finance.manage | lançar, editar e excluir manuais, marcar pago, categorias | criar lançamento "de pedido", editar automático, excluir categoria de sistema, usar categoria de receita em despesa |
+| Sem permissão de financeiro (atendimento, cliente) | — | ler lançamentos, categorias ou o resumo |
+
+## Decisões
+- **Data de referência:** pago/recebido conta na data do pagamento; pendente, no vencimento.
+- **Cancelado depois de pago** remove a receita (a venda não aconteceu). **Reembolsado** mantém a receita e lança o estorno, deixando o dinheiro que voltou visível.
+- **Lucro por produto:** usa o custo médio **atual** das compras. Produto sem compra registrada aparece com custo "—".
+- **PDF:** sai da impressão do navegador. A página do relatório é sempre clara e em formato A4.
+- **Excel:** usa a biblioteca `write-excel-file`, carregada só ao exportar.
+
+## Pendências
+- Aplicar 0011, 0012 e 0013 no Supabase e testar as telas de verdade (com a câmera em HTTPS, ou seja, depois do deploy ou em localhost).

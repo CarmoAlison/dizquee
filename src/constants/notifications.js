@@ -7,4 +7,6 @@ export const NOTIFICATION_TEXT = {
   story_comment: 'comentou no seu story',
   story_reply: 'respondeu seu comentário em um story',
   story_reaction: 'reagiu ao seu story',
+  order_created: 'fez um pedido',
+  order_status: 'atualizou o pedido',
 }

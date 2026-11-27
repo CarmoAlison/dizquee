@@ -3,6 +3,7 @@
 import { Link, NavLink, useLocation } from 'react-router'
 import { ROUTES } from '../../../constants/routes'
 import { useAuth } from '../../../hooks/useAuth'
+import { useCart } from '../../../hooks/useCart'
 import { usePermission } from '../../../hooks/usePermission'
 import { cn } from '../../../utils/cn'
 import { Avatar } from '../../common/Avatar/Avatar'
@@ -16,6 +17,7 @@ import styles from './Header.module.css'
 export function Header() {
   const { isAuthenticated, profile } = useAuth()
   const { canAccessAdmin } = usePermission()
+  const { count: cartCount } = useCart()
   const location = useLocation()
   const loginTarget = `${ROUTES.LOGIN}?redirect=${encodeURIComponent(location.pathname + location.search)}`
 
@@ -33,6 +35,14 @@ export function Header() {
           <NavLink to={ROUTES.STORIES} className={({ isActive }) => cn(styles.link, isActive && styles.active)}>
             Stories
           </NavLink>
+          <NavLink to={ROUTES.SHOP} className={({ isActive }) => cn(styles.link, isActive && styles.active)}>
+            Loja
+          </NavLink>
+          {isAuthenticated && (
+            <NavLink to={ROUTES.MY_ORDERS} className={({ isActive }) => cn(styles.link, isActive && styles.active)}>
+              Meus pedidos
+            </NavLink>
+          )}
           {canAccessAdmin && (
             <NavLink to={ROUTES.ADMIN} className={({ isActive }) => cn(styles.link, isActive && styles.active)}>
               Painel
@@ -42,6 +52,14 @@ export function Header() {
 
         <div className={styles.actions}>
           <ThemeToggle className={styles.iconButton} />
+          <Link to={ROUTES.CART} className={cn(styles.iconButton, styles.cart)} aria-label={`Carrinho${cartCount ? `, ${cartCount} item(ns)` : ''}`}>
+            <Icon name="cart" />
+            {cartCount > 0 && (
+              <span className={styles.cartBadge} aria-hidden="true">
+                {cartCount > 99 ? '99+' : cartCount}
+              </span>
+            )}
+          </Link>
           {isAuthenticated ? (
             <>
               <span className={styles.desktopOnly}>

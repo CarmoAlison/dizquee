@@ -22,7 +22,7 @@ export function AdminRoute({ children }) {
   const location = useLocation()
   if (loading) return <Loader fullPage />
   if (!isAuthenticated) {
-    return <Navigate to={`${ROUTES.LOGIN}?redirect=${encodeURIComponent(location.pathname)}`} replace />
+    return <Navigate to={`${ROUTES.LOGIN}?redirect=${encodeURIComponent(location.pathname + location.search)}`} replace />
   }
   if (!canAccessAdmin) return <AccessDenied />
   return children || <Outlet />

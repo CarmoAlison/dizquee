@@ -1,7 +1,8 @@
 // Ordem dos providers: tema -> toasts -> marca -> sessão -> permissões ->
-// notificações -> modal de login (usa toasts e sessão)
+// notificações -> modal de login (usa toasts e sessão) -> carrinho
 import { AuthProvider } from './contexts/AuthContext'
 import { BrandProvider } from './contexts/BrandContext'
+import { CartProvider } from './contexts/CartContext'
 import { LoginPromptProvider } from './contexts/LoginPromptContext'
 import { NotificationsProvider } from './contexts/NotificationsContext'
 import { PermissionProvider } from './contexts/PermissionContext'
@@ -23,7 +24,9 @@ export default function App() {
               <PermissionProvider>
                 <NotificationsProvider>
                   <LoginPromptProvider>
-                    <AppRoutes />
+                    <CartProvider>
+                      <AppRoutes />
+                    </CartProvider>
                   </LoginPromptProvider>
                 </NotificationsProvider>
               </PermissionProvider>

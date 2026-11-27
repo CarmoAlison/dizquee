@@ -54,6 +54,9 @@ No **SQL Editor**, rode **em ordem** os arquivos de `supabase/migrations/`:
 | `0008_stories.sql` | Fase 3: stories, views, reações, estatísticas, limpeza |
 | `0009_admin_audit_metrics.sql` | Fase 4: auditoria automática e métricas do dashboard |
 | `0010_brand_settings.sql` | Identidade visual editável pelo painel (nome, logo, cores) |
+| `0011_shop_orders.sql` | Fase 6: loja (produtos, variações, estoque, lotes, kits), pedidos, bucket `product-images` |
+| `0012_pickup_stock_sales.sql` | Fase 7: retirada com QR Code, fornecedores, compras com custo, ajustes de estoque, venda rápida |
+| `0013_finance.sql` | Fase 8: financeiro (categorias, lançamentos, automáticos de pedidos/compras, relatórios) |
 
 Todos são idempotentes (podem ser rodados de novo). Com a Supabase CLI: `supabase db push`.
 
@@ -81,7 +84,7 @@ Todos são idempotentes (podem ser rodados de novo). Com a Supabase CLI: `supaba
 Quem entra por Google ou telefone passa pela etapa **Completar cadastro** (usuário único, telefone e aceite dos termos).
 
 ### 2.4 Storage
-Os buckets são criados pela migração 0005 (`avatars`, `post-media`, `story-media`, `highlight-covers`, `brand`), públicos para leitura. Limites por arquivo: avatar 2 MB, post 50 MB, story 30 MB, capa 2 MB. No plano gratuito o máximo por arquivo é **50 MB** (Storage › Settings) e o total de armazenamento é limitado — oriente a equipe a comprimir vídeos antes de subir.
+Os buckets são criados pela migração 0005 (`avatars`, `post-media`, `story-media`, `highlight-covers`, `brand`) e pela 0011 (`product-images`, até 5 MB), todos públicos para leitura. Limites por arquivo: avatar 2 MB, post 50 MB, story 30 MB, capa 2 MB. No plano gratuito o máximo por arquivo é **50 MB** (Storage › Settings) e o total de armazenamento é limitado — oriente a equipe a comprimir vídeos antes de subir.
 
 ### 2.5 Edge Functions
 Com a [Supabase CLI](https://supabase.com/docs/guides/cli):
@@ -151,6 +154,14 @@ Tudo é salvo na tabela `app_settings` (migração `0010_brand_settings.sql`) e 
 - **Imagem padrão de compartilhamento:** `public/icons/og-default.png` (1200x630).
 - **Valores padrão** (usados antes de salvar no painel): `src/constants/brand.js` e `src/assets/brand/logo-mark.svg`.
 
+## 4.1 Bibliotecas da loja e do financeiro
+
+- `qrcode`: gera o QR Code da retirada no celular do cliente (leve, sem dependências de interface).
+- `jsqr`: lê o QR pela câmera quando o navegador não tem leitor nativo (iPhone/Safari). Carregada só na tela de Retirada.
+- `write-excel-file`: gera o .xlsx de verdade, com abas e formato de moeda. Carregada só ao exportar.
+- O PDF do relatório usa a impressão do navegador ("Salvar como PDF"), sem biblioteca: o texto fica pesquisável e o arquivo sai leve.
+- A câmera só funciona em HTTPS (a Vercel já é) ou em localhost.
+
 ## 5. Onde mexer
 | Quero mudar… | Arquivo |
 |---|---|
@@ -162,7 +173,7 @@ Tudo é salvo na tabela `app_settings` (migração `0010_brand_settings.sql`) e 
 ## 6. Estrutura
 ```
 api/share/[slug].js        Vercel Function (Open Graph)
-supabase/migrations/       SQL numerado (0001-0009)
+supabase/migrations/       SQL numerado (0001-0013)
 supabase/functions/        Edge Functions (create-staff-user, cleanup-stories)
 supabase/tests/            teste local de RLS (npm run test:db)
 src/components/            common, layout, auth, posts, stories, comments, notifications, admin

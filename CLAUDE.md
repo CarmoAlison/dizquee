@@ -1,6 +1,6 @@
 # Prompt Mestre - Site e sistema do Bloco de Carnaval
 
-> Este arquivo é o **CLAUDE.md** do projeto: o Claude Code o lê automaticamente. Ele vale para todas as fases. As tarefas de cada fase estão em arquivos separados (docs/fases/fase-1.md a fase-5.md).
+> Este arquivo é o **CLAUDE.md** do projeto: o Claude Code o lê automaticamente. Ele vale para todas as fases. As tarefas de cada fase estão em arquivos separados (docs/fases/fase-1.md a fase-8.md; a fase 5, de push, é opcional).
 
 ## 1. Seu papel e o objetivo
 
@@ -10,11 +10,13 @@ Você é um desenvolvedor full-stack sênior, especialista em React, Supabase (P
 
 **Dentro do escopo agora:** autenticação, perfis e permissões, posts, categorias, stories, destaques, curtidas, comentários, reações, notificações dentro do site, painel admin, métricas, PWA, compartilhamento.
 
+**Escopo novo (fases 6 a 8, ver docs/fases/):** loja (abadás, copos e kits) com variações, estoque e lotes; pedidos fechados pelo WhatsApp, com controle de status; retirada com QR Code; compras de fornecedor e controle de estoque; venda rápida presencial; financeiro do bloco inteiro (receitas, despesas, a pagar/pago), com relatórios em CSV, Excel e PDF.
+
 **Fora do escopo agora (não implementar, mas deixar a arquitetura preparada):**
 
 - Página de agenda/eventos/ensaios/desfiles
-- Loja (abadá, copo, camisas) e pagamentos. No futuro será tudo comprado pelo sistema, então não crie nada que impeça essa evolução (ex.: mantenha a estrutura de pastas e de permissões extensível por módulo)
-- Galeria de desfiles, área de patrocinadores, carteirinha digital com QR Code (ideias para depois)
+- Pagamento online (gateway, Pix automático, cartão). Hoje a venda é fechada pelo WhatsApp; não crie nada que impeça plugar um gateway depois
+- Galeria de desfiles, área de patrocinadores, carteirinha digital (ideias para depois; o QR Code da retirada, da Fase 7, pode ser reaproveitado)
 - Denúncia de comentários e filtro de palavrões (o admin apaga manualmente quando precisar)
 
 ## 3. Stack e padrões técnicos
@@ -250,3 +252,14 @@ public/          icons/ manifest assets
 - **Perfis iniciais:** só o Super Admin vem pronto no seed. Os demais perfis são criados por mim no painel.
 - **Visualizações de story de visitantes:** contam por session_id anônimo, sem identificar a pessoa.
 - **Push:** fica na Fase 5 (opcional). Até lá, as notificações existem só dentro do site.
+
+### Loja, pedidos e financeiro (fases 6 a 8)
+
+- **Sem gateway de pagamento:** o cliente faz o pedido logado, o pedido nasce "Aguardando pagamento" e reserva o estoque, e a venda é fechada pelo WhatsApp. Depois o admin atualiza o status no painel.
+- **Status do pedido:** Aguardando pagamento → Pago → Pronto para retirada → Retirado; também Cancelado e Reembolsado. Todo o histórico é registrado e o cliente é avisado no site (sem e-mail por enquanto).
+- **Pedido não pago não expira sozinho:** quem decide cancelar é o admin.
+- **Sem CPF, cupom, limite por pessoa, parcelamento ou nota fiscal** (o bloco não tem CNPJ).
+- **Nome de quem vai usar:** opcional, ligado por produto.
+- **Entrega:** só retirada, com QR Code (Fase 7).
+- **Preço e estoque são sempre calculados no banco** (RPC), nunca confiados ao navegador.
+- **Financeiro do bloco inteiro:** as vendas pagas entram sozinhas como receita e as compras de fornecedor como despesa. O resto é lançado à mão, com categoria e status a pagar/pago.

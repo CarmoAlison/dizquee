@@ -1,0 +1,29 @@
+.dot {
+  width: 10px;
+  height: 40px;
+  border-radius: 5px;
+  flex-shrink: 0;
+}
+
+.amount {
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  margin-right: var(--space-1);
+}
+
+.income {
+  color: var(--color-success);
+}
+
+.expense {
+  color: var(--color-danger);
+}
+
+.overdueRow {
+  border-color: color-mix(in srgb, var(--color-danger) 45%, transparent);
+}
+
+.pageTotal {
+  margin-top: var(--space-3);
+  text-align: right;
+}

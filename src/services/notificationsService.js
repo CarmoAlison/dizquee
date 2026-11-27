@@ -3,7 +3,7 @@ import { attachProfiles } from './profileService'
 import { supabase } from './supabaseClient'
 
 const FIELDS =
-  'id, type, actor_id, post_id, story_id, comment_id, story_comment_id, read_at, created_at, posts(title, slug), comments(content), story_comments(content)'
+  'id, type, actor_id, post_id, story_id, comment_id, story_comment_id, order_id, meta, read_at, created_at, posts(title, slug), comments(content), story_comments(content)'
 
 export async function listNotifications({ limit = 20, before = null } = {}) {
   let query = supabase.from('notifications').select(FIELDS).order('created_at', { ascending: false }).limit(limit)

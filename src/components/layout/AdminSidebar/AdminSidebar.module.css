@@ -40,12 +40,36 @@
   font-weight: var(--weight-black);
 }
 
+.groups {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  flex: 1;
+}
+
+.group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.groupTitle {
+  padding: 0 var(--space-3);
+  margin-bottom: var(--space-1);
+  font-size: 11px;
+  font-weight: var(--weight-bold);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-accent-2);
+  opacity: 0.85;
+}
+
 .list {
   display: flex;
   flex-direction: column;
   gap: 2px;
   margin: 0;
-  flex: 1;
+  padding: 0;
   font-size: 13px;
 }
 

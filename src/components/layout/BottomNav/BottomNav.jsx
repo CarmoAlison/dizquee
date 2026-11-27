@@ -1,4 +1,4 @@
-// Navegação inferior no celular: Início, Stories, Notificações, Perfil
+// Navegação inferior no celular: Início, Stories, Loja, Notificações, Perfil
 import { NavLink } from 'react-router'
 import { ROUTES } from '../../../constants/routes'
 import { useAuth } from '../../../hooks/useAuth'
@@ -14,6 +14,7 @@ export function BottomNav() {
   const items = [
     { to: ROUTES.HOME, label: 'Início', icon: 'home', end: true },
     { to: ROUTES.STORIES, label: 'Stories', icon: 'stories' },
+    { to: ROUTES.SHOP, label: 'Loja', icon: 'bag' },
     { to: ROUTES.NOTIFICATIONS, label: 'Notificações', icon: 'bell', badge: isAuthenticated ? unread : 0 },
     { to: isAuthenticated ? ROUTES.PROFILE : ROUTES.LOGIN, label: isAuthenticated ? 'Perfil' : 'Entrar', icon: isAuthenticated ? 'user' : 'login' },
   ]

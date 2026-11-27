@@ -29,6 +29,14 @@ export const PERMISSIONS = {
   METRICS_VIEW: 'metrics.view',
   AUDIT_VIEW: 'audit.view',
   SETTINGS_MANAGE: 'settings.manage',
+  PRODUCTS_MANAGE: 'products.manage',
+  ORDERS_VIEW: 'orders.view',
+  ORDERS_MANAGE: 'orders.manage',
+  ORDERS_CHECKIN: 'orders.checkin',
+  STOCK_MANAGE: 'stock.manage',
+  SALES_CREATE: 'sales.create',
+  FINANCE_VIEW: 'finance.view',
+  FINANCE_MANAGE: 'finance.manage',
 }
 
 const P = PERMISSIONS
@@ -45,6 +53,11 @@ export const MODULE_LABELS = {
   metrics: 'Métricas',
   audit: 'Auditoria',
   settings: 'Configurações',
+  shop: 'Loja (produtos e estoque)',
+  orders: 'Pedidos',
+  stock: 'Estoque e compras',
+  sales: 'Venda rápida',
+  finance: 'Financeiro',
 }
 
 // Permissões que dão acesso a cada módulo do painel (qualquer uma delas)
@@ -60,4 +73,11 @@ export const ADMIN_MODULE_ACCESS = {
   comments: [P.COMMENTS_DELETE_ANY],
   audit: [P.AUDIT_VIEW],
   settings: [P.SETTINGS_MANAGE],
+  products: [P.PRODUCTS_MANAGE],
+  orders: [P.ORDERS_VIEW],
+  checkin: [P.ORDERS_CHECKIN, P.ORDERS_MANAGE],
+  sales: [P.SALES_CREATE],
+  stock: [P.STOCK_MANAGE],
+  finance: [P.FINANCE_VIEW, P.FINANCE_MANAGE],
+  financeCategories: [P.FINANCE_MANAGE],
 }

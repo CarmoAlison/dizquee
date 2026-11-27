@@ -14,6 +14,11 @@ const ResetPassword = lazy(() => import('../pages/public/ResetPassword/ResetPass
 const CompleteProfile = lazy(() => import('../pages/public/CompleteProfile/CompleteProfile'))
 const Profile = lazy(() => import('../pages/public/Profile/Profile'))
 const Notifications = lazy(() => import('../pages/public/Notifications/Notifications'))
+const Shop = lazy(() => import('../pages/public/Shop/Shop'))
+const ProductDetails = lazy(() => import('../pages/public/ProductDetails/ProductDetails'))
+const Cart = lazy(() => import('../pages/public/Cart/Cart'))
+const MyOrders = lazy(() => import('../pages/public/MyOrders/MyOrders'))
+const OrderDetails = lazy(() => import('../pages/public/OrderDetails/OrderDetails'))
 const Terms = lazy(() => import('../pages/public/Terms/Terms'))
 const Privacy = lazy(() => import('../pages/public/Privacy/Privacy'))
 const NotFound = lazy(() => import('../pages/public/NotFound/NotFound'))
@@ -25,6 +30,9 @@ export function PublicRoutes() {
       <Route index element={<Home />} />
       <Route path="post/:slug" element={<PostDetails />} />
       <Route path="stories" element={<Stories />} />
+      <Route path="loja" element={<Shop />} />
+      <Route path="loja/:slug" element={<ProductDetails />} />
+      <Route path="carrinho" element={<Cart />} />
       <Route path="termos" element={<Terms />} />
       <Route path="privacidade" element={<Privacy />} />
       <Route path="redefinir-senha" element={<ResetPassword />} />
@@ -38,6 +46,8 @@ export function PublicRoutes() {
       <Route element={<ProtectedRoute />}>
         <Route path="perfil" element={<Profile />} />
         <Route path="notificacoes" element={<Notifications />} />
+        <Route path="pedidos" element={<MyOrders />} />
+        <Route path="pedidos/:number" element={<OrderDetails />} />
         <Route path="completar-cadastro" element={<CompleteProfile />} />
       </Route>
 

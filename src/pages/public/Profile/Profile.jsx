@@ -124,6 +124,9 @@ function ProfileContent() {
         </h2>
         <div className={styles.row}>
           <ThemeToggle withLabel />
+          <Button to={ROUTES.MY_ORDERS} variant="secondary" icon="bag">
+            Meus pedidos
+          </Button>
           {canAccessAdmin && (
             <Button to={ROUTES.ADMIN} variant="secondary" icon="dashboard">
               Painel administrativo

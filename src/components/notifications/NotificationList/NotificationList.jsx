@@ -1,6 +1,7 @@
 // Lista de notificações (usada no dropdown do sino e na página /notificacoes)
 import { Link } from 'react-router'
 import { NOTIFICATION_TEXT } from '../../../constants/notifications'
+import { ORDER_STATUS } from '../../../constants/orders'
 import { ROUTES } from '../../../constants/routes'
 import { useNotifications } from '../../../hooks/useNotifications'
 import { cn } from '../../../utils/cn'
@@ -12,7 +13,23 @@ import { ErrorState } from '../../common/ErrorState/ErrorState'
 import { Skeleton } from '../../common/Skeleton/Skeleton'
 import styles from './NotificationList.module.css'
 
+// Pedido: a equipe vai para o painel; o cliente, para "Meus pedidos"
+function isStaffOrderNotice(n) {
+  return n.type === 'order_created' || (n.type === 'order_status' && n.meta?.by_customer)
+}
+
+function textFor(n) {
+  const number = n.meta?.number ? ` #${n.meta.number}` : ''
+  if (n.type === 'order_created') return `fez o pedido${number}`
+  if (n.type === 'order_status' && n.meta?.by_customer) return `cancelou o pedido${number}`
+  if (n.type === 'order_status') return `atualizou seu pedido${number}: ${ORDER_STATUS[n.meta?.status]?.label || 'novo status'}`
+  return NOTIFICATION_TEXT[n.type] || 'interagiu com você'
+}
+
 function linkFor(n) {
+  if (n.meta?.number && (n.type === 'order_created' || n.type === 'order_status')) {
+    return isStaffOrderNotice(n) ? ROUTES.ADMIN_ORDER(n.meta.number) : ROUTES.MY_ORDER(n.meta.number)
+  }
   if (n.post_id && n.posts?.slug) return `${ROUTES.POST(n.posts.slug)}${n.comment_id ? '#comentarios' : ''}`
   if (n.story_id) return `${ROUTES.STORIES}?story=${n.story_id}`
   return ROUTES.NOTIFICATIONS
@@ -83,7 +100,7 @@ export function NotificationList({ compact = false, onNavigate, limit }) {
                 <Avatar src={n.actor?.avatar_url} name={name} size={compact ? 36 : 44} />
                 <span className={styles.text}>
                   <span>
-                    <strong>{name}</strong> {NOTIFICATION_TEXT[n.type] || 'interagiu com você'}
+                    <strong>{name}</strong> {textFor(n)}
                   </span>
                   {excerpt(n) && <span className={styles.excerpt}>{excerpt(n)}</span>}
                   <span className={styles.time}>{formatRelative(n.created_at)}</span>

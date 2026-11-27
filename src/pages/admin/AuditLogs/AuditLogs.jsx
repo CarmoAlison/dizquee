@@ -1,5 +1,6 @@
 // Log de auditoria: quem fez o quê, com filtros
 import { useState } from 'react'
+import { ORDER_STATUS } from '../../../constants/orders'
 import { useAsync } from '../../../hooks/useAsync'
 import { useDebounce } from '../../../hooks/useDebounce'
 import { listAuditLogs } from '../../../services/auditService'
@@ -45,6 +46,29 @@ const ACTION_LABELS = {
   'staff.change_role': 'trocou o perfil de',
   'comment.delete': 'excluiu o comentário',
   'story_comment.delete': 'excluiu o comentário de story',
+  'product.create': 'criou o produto',
+  'product.update': 'editou o produto',
+  'product.delete': 'excluiu o produto',
+  'product_variant.create': 'criou a variação',
+  'product_variant.update': 'editou a variação (ou o estoque)',
+  'product_variant.delete': 'excluiu a variação',
+  'product_lot.create': 'criou o lote',
+  'product_lot.update': 'editou o lote',
+  'product_lot.delete': 'excluiu o lote',
+  'shop_settings.update': 'alterou as configurações da loja',
+  'order.status': 'mudou o status do pedido',
+  'purchase.create': 'registrou a compra de',
+  'purchase.delete': 'excluiu a compra de',
+  'supplier.create': 'cadastrou o fornecedor',
+  'supplier.update': 'editou o fornecedor',
+  'supplier.delete': 'excluiu o fornecedor',
+  'stock.adjust': 'ajustou o estoque de',
+  'finance_entry.insert': 'lançou',
+  'finance_entry.update': 'alterou o lançamento',
+  'finance_entry.delete': 'excluiu o lançamento',
+  'finance_category.create': 'criou a categoria financeira',
+  'finance_category.update': 'editou a categoria financeira',
+  'finance_category.delete': 'excluiu a categoria financeira',
 }
 
 const ENTITIES = [
@@ -56,11 +80,30 @@ const ENTITIES = [
   { value: 'role', label: 'Perfis de acesso' },
   { value: 'user', label: 'Usuários e equipe' },
   { value: 'comment', label: 'Comentários' },
+  { value: 'product', label: 'Produtos' },
+  { value: 'product_variant', label: 'Variações e estoque' },
+  { value: 'product_lot', label: 'Lotes' },
+  { value: 'order', label: 'Pedidos' },
+  { value: 'shop_settings', label: 'Configurações da loja' },
+  { value: 'purchase', label: 'Compras' },
+  { value: 'supplier', label: 'Fornecedores' },
+  { value: 'finance_entry', label: 'Lançamentos financeiros' },
+  { value: 'finance_category', label: 'Categorias financeiras' },
 ]
 
 function details(log) {
   const m = log.metadata || {}
   const parts = []
+  if (log.action === 'order.status') {
+    parts.push(`novo status: ${ORDER_STATUS[m.to]?.label || m.to}`)
+    if (m.note) parts.push(m.note)
+    return parts.join(' · ')
+  }
+  if (log.action === 'stock.adjust') {
+    parts.push(`${m.delta > 0 ? '+' : ''}${m.delta} un.`)
+    if (m.note) parts.push(m.note)
+    return parts.join(' · ')
+  }
   if (m.permission) parts.push(m.permission)
   if (m.reason) parts.push(`motivo: ${m.reason}`)
   if (m.from !== undefined || m.to !== undefined) parts.push(`${m.from || 'sem perfil'} → ${m.to || 'sem perfil'}`)

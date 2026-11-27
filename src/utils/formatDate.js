@@ -52,3 +52,13 @@ export function formatCount(n) {
   const value = Number(n) || 0
   return new Intl.NumberFormat('pt-BR', { notation: 'compact', maximumFractionDigits: 1 }).format(value)
 }
+
+// Coluna "date" do banco ("2026-11-26"), sem deslocar pelo fuso: "26 de novembro de 2026"
+export function formatDateOnly(value) {
+  return value ? formatLongDate(`${value}T12:00:00`) : ''
+}
+
+// "2026-11-26" de hoje (fuso local), para <input type="date">
+export function todayInput() {
+  return format(new Date(), 'yyyy-MM-dd')
+}

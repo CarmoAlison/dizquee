@@ -8,6 +8,7 @@ export const BUCKETS = {
   STORY_MEDIA: 'story-media',
   HIGHLIGHT_COVERS: 'highlight-covers',
   BRAND: 'brand',
+  PRODUCT_IMAGES: 'product-images',
 }
 
 const TRANSFORM_ENABLED = import.meta.env.VITE_SUPABASE_IMAGE_TRANSFORM === 'true'
