@@ -15,6 +15,7 @@ import { formatMoney } from '../../../utils/money'
 import { Button } from '../../../components/common/Button/Button'
 import { EmptyState } from '../../../components/common/EmptyState/EmptyState'
 import { ErrorState } from '../../../components/common/ErrorState/ErrorState'
+import { Icon } from '../../../components/common/Icon/Icon'
 import { Input } from '../../../components/common/Input/Input'
 import { Skeleton } from '../../../components/common/Skeleton/Skeleton'
 import { OptionPicker } from '../../../components/shop/OptionPicker/OptionPicker'
@@ -155,31 +156,37 @@ function ProductContent({ product }) {
 
         <div className={styles.info}>
           <div className={styles.headline}>
-            {isKit && <span className={styles.kitTag}>Kit</span>}
-            <h1 className={styles.name}>{product.name}</h1>
-            {product.lot ? (
-              <div className={styles.priceRow}>
-                <span className={styles.price}>{formatMoney(product.lot.price)}</span>
-                <span className={styles.lot}>{product.lot.name}</span>
+            {(isKit || product.lot || product.next_lot) && (
+              <div className={styles.tags}>
+                {(product.lot || product.next_lot) && <span className={styles.lot}>{(product.lot || product.next_lot).name}</span>}
+                {isKit && <span className={styles.kitTag}>Kit</span>}
               </div>
-            ) : (
-              product.next_lot && (
-                <div className={styles.priceRow}>
-                  <span className={styles.price}>{formatMoney(product.next_lot.price)}</span>
-                  <span className={styles.lot}>{product.next_lot.name}</span>
-                </div>
-              )
             )}
-            {product.lot && (product.lot.remaining !== null || product.lot.ends_at) && (
-              <p className={shop.muted}>
-                {product.lot.remaining !== null && `Restam ${product.lot.remaining} neste lote. `}
-                {product.lot.ends_at && `Lote válido até ${formatDateTime(product.lot.ends_at)}.`}
-              </p>
+            <h1 className={styles.name}>{product.name}</h1>
+            {(product.lot || product.next_lot) && (
+              <p className={styles.price}>{formatMoney((product.lot || product.next_lot).price)}</p>
             )}
-            {product.lot && product.next_lot && (
-              <p className={shop.muted}>
-                Depois: {product.next_lot.name} por {formatMoney(product.next_lot.price)}.
-              </p>
+            {product.lot && (product.lot.remaining !== null || product.lot.ends_at || product.next_lot) && (
+              <ul className={styles.facts}>
+                {product.lot.remaining !== null && (
+                  <li>
+                    <Icon name="box" size={16} />
+                    Restam <strong>{product.lot.remaining}</strong> neste lote
+                  </li>
+                )}
+                {product.lot.ends_at && (
+                  <li>
+                    <Icon name="clock" size={16} />
+                    Lote válido até {formatDateTime(product.lot.ends_at)}
+                  </li>
+                )}
+                {product.next_lot && (
+                  <li>
+                    <Icon name="layers" size={16} />
+                    Depois: {product.next_lot.name} por {formatMoney(product.next_lot.price)}
+                  </li>
+                )}
+              </ul>
             )}
           </div>
 
@@ -268,7 +275,12 @@ function ProductContent({ product }) {
             </div>
           )}
 
-          {product.description && <p className={`${styles.description} ${shop.pre}`}>{product.description}</p>}
+          {product.description && (
+            <section className={styles.about}>
+              <h2 className={styles.aboutTitle}>Sobre o produto</h2>
+              <p className={`${styles.description} ${shop.pre}`}>{product.description}</p>
+            </section>
+          )}
         </div>
       </div>
     </div>

@@ -16,39 +16,66 @@
   gap: var(--space-2);
 }
 
-.kitTag {
-  padding: 2px 10px;
-  border-radius: var(--radius-full);
-  background: var(--color-accent-1-strong);
-  color: #fff;
-  font-size: var(--text-xs);
-  font-weight: var(--weight-bold);
-}
-
-.name {
-  font-size: var(--text-2xl);
-}
-
-.priceRow {
+.tags {
   display: flex;
-  align-items: center;
   flex-wrap: wrap;
   gap: var(--space-2);
 }
 
-.price {
-  font-size: var(--text-2xl);
-  font-weight: var(--weight-black);
-  color: var(--color-primary);
+.lot,
+.kitTag {
+  padding: 3px 12px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-bold);
 }
 
 .lot {
-  padding: 2px 10px;
-  border-radius: var(--radius-full);
   background: var(--color-accent-2);
   color: var(--color-on-accent-2);
-  font-size: var(--text-xs);
-  font-weight: var(--weight-bold);
+}
+
+.kitTag {
+  background: var(--color-accent-1-strong);
+  color: #fff;
+}
+
+.name {
+  font-size: var(--text-2xl);
+  line-height: 1.15;
+}
+
+.price {
+  font-size: var(--text-3xl);
+  font-weight: var(--weight-black);
+  line-height: 1.1;
+  color: var(--color-primary);
+}
+
+.facts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  margin: var(--space-1) 0 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-sm);
+  color: var(--color-text-muted);
+}
+
+.facts li {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.facts svg {
+  flex-shrink: 0;
+  color: var(--color-primary);
+}
+
+.facts strong {
+  color: var(--color-text);
 }
 
 .form {
@@ -56,9 +83,10 @@
   flex-direction: column;
   gap: var(--space-5);
   padding: var(--space-5);
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-md);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
+  border-left: 5px solid var(--color-primary-1);
   box-shadow: var(--shadow-sm);
 }
 
@@ -88,8 +116,20 @@
   gap: var(--space-3);
 }
 
+.about {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  padding-top: var(--space-4);
+  border-top: 1px solid var(--color-border);
+}
+
+.aboutTitle {
+  font-size: var(--text-md);
+}
+
 .description {
-  color: var(--color-text);
+  color: var(--color-text-muted);
   line-height: var(--leading-normal);
 }
 
@@ -98,5 +138,11 @@
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
     align-items: start;
     gap: var(--space-8);
+  }
+
+  /* A foto acompanha a rolagem enquanto a pessoa preenche o pedido */
+  .layout > :first-child {
+    position: sticky;
+    top: calc(var(--header-height, 64px) + var(--space-4));
   }
 }

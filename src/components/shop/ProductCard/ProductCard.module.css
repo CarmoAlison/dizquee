@@ -2,9 +2,10 @@
   position: relative;
   display: flex;
   flex-direction: column;
-  border-radius: var(--radius-xl);
+  border-radius: var(--radius-md);
   background: var(--color-surface);
   border: 1px solid var(--color-border);
+  border-left: 5px solid #660385;
   box-shadow: var(--shadow-sm);
   overflow: hidden;
   color: var(--color-text);
@@ -18,7 +19,7 @@
 .card:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-md);
-  border-color: var(--color-border-strong);
+
 }
 
 .dimmed .image {
